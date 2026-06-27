@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>데이트 신청 💌</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, #ffe0ec, #e0f7ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  width: 340px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+input, select {
+  width: 90%;
+  padding: 8px;
+  margin: 6px 0;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+#yes {
+  background: #ff5c8a;
+  color: white;
+}
+
+#no {
+  background: #ddd;
+  position: absolute;
+}
+
+#canvas {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.result {
+  margin-top: 10px;
+  font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <h2>💬 데이트 신청</h2>
+
+  <input id="name" placeholder="이름 입력">
+
+  <p>같이 데이트 가자 💕</p>
+  <p>이유: 너가 좋아서</p>
+
+  <p>어디 갈까?</p>
+  <select id="place">
+    <option value="comic">만화카페 📚</option>
+    <option value="movie">영화관 🎬</option>
+  </select>
+
+  <p>영화 선택</p>
+  <select id="movie">
+    <option>액션</option>
+    <option>로맨스</option>
+    <option>코미디</option>
+  </select>
+
+  <br>
+
+  <button id="yes" onclick="sayYes()">YES</button>
+  <button id="no" onmouseover="moveNo()">NO</button>
+
+  <div class="result" id="result"></div>
+
+  <p>서명 ✍️</p>
+  <canvas id="canvas" width="280" height="100"></canvas>
+  <br>
+  <button onclick="clearCanvas()">지우기</button>
+
+</div>
+
+<script>
+
+// YES 버튼
+function sayYes() {
+  let name = document.getElementById("name").value || "너";
+  let place = document.getElementById("place").value;
+  let movie = document.getElementById("movie").value;
+
+  let placeText = place === "comic" ? "만화카페" : "영화관";
+
+  document.getElementById("result").innerText =
+    name + " 👍 좋아, " + placeText + " 가자! 영화는 " + movie + "!";
+}
+
+// NO 버튼 도망
+function moveNo() {
+  let btn = document.getElementById("no");
+
+  let x = Math.random() * (window.innerWidth - 100);
+  let y = Math.random() * (window.innerHeight - 100);
+
+  btn.style.left = x + "px";
+  btn.style.top = y + "px";
+}
+
+// 서명 기능
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+let drawing = false;
+
+canvas.addEventListener("mousedown", start);
+canvas.addEventListener("mouseup", stop);
+canvas.addEventListener("mousemove", draw);
+
+function start(e) {
+  drawing = true;
+  ctx.beginPath();
+  ctx.moveTo(e.offsetX, e.offsetY);
+}
+
+function stop() {
+  drawing = false;
+}
+
+function draw(e) {
+  if (!drawing) return;
+  ctx.lineWidth = 2;
+  ctx.lineTo(e.offsetX, e.offsetY);
+  ctx.stroke();
+}
+
+function clearCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+</script>
+
+</body>
+</html>
